@@ -1,10 +1,8 @@
 # PythonFoundry
 
-A collection of small, practical Python applications built with a simple `app.py` entry point and minimal styling.
+A collection of small, practical Python applications with simple interfaces and minimal dependencies.
 
 ## Structure
-
-Each application should live in its own directory under `projects/`.
 
 ```text
 PythonFoundry/
@@ -12,6 +10,8 @@ PythonFoundry/
 ├── script.js
 ├── style.css
 └── projects/
+    ├── number-guessing-game/
+    │   └── app.py
     └── _template/
         ├── app.py
         ├── index.html
@@ -20,18 +20,15 @@ PythonFoundry/
 
 ## Project Convention
 
-Each project should be intentionally small and self-contained.
+Each project is self-contained and intentionally small.
 
-- `app.py` — Python application entry point
-- `index.html` — minimal interface when a browser UI is appropriate
-- `style.css` — minimal styling
-- Avoid unnecessary frameworks and dependencies
-- Keep each project easy to understand and run independently
+- `app.py` is the Python entry point.
+- `index.html` and `style.css` can be used when a simple browser interface is needed.
+- Keep dependencies to a minimum.
+- Keep projects easy to run and understand.
 
-## Adding a Project
+## Run a project
 
-Create a new directory under `projects/` and use `_template` as the starting structure.
-
-## Philosophy
-
-PythonFoundry is the Python counterpart to VanillaJsFoundry: a simple home for small, focused projects and experiments.
+```bash
+python app.py
+```
