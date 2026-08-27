@@ -1,17 +1,1 @@
-const projects = [
-  {
-    name: "Number Guessing Game",
-    path: "projects/number-guessing-game/app.py"
-  }
-];
-
-const container = document.getElementById("projects");
-
-projects.forEach((project) => {
-  const card = document.createElement("a");
-  card.className = "project";
-  card.href = project.path;
-  card.textContent = project.name;
-  card.target = "_blank";
-  container.appendChild(card);
-});
+const API='https://api.github.com/repos/buildtheportfolio/PythonFoundry/contents/projects';const projectsEl=document.getElementById('projects');const statusEl=document.getElementById('status');const searchEl=document.getElementById('search');const countEl=document.getElementById('count');let projects=[];function titleFromSlug(slug){return slug.replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}function render(){const q=searchEl.value.trim().toLowerCase();const visible=projects.filter(p=>p.name.toLowerCase().includes(q));countEl.textContent=`${visible.length} project${visible.length===1?'':'s'}`;projectsEl.innerHTML=visible.length?visible.map(p=>`<a class="card" href="projects/${encodeURIComponent(p.slug)}/"><h2>${p.name}</h2><p>Python project.</p><span class="open">Open project →</span></a>`).join(''):'<div class="empty">No projects match your search.</div>';statusEl.hidden=true}async function loadProjects(){try{const r=await fetch(API,{headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw new Error();const e=await r.json();projects=e.filter(x=>x.type==='dir'&&x.name!=='_template').map(x=>({slug:x.name,name:titleFromSlug(x.name)})).sort((a,b)=>a.name.localeCompare(b.name));render()}catch(e){projectsEl.innerHTML='<div class="empty">Projects could not be loaded. Refresh and try again.</div>';countEl.textContent='';statusEl.hidden=true}}searchEl.addEventListener('input',render);loadProjects();
