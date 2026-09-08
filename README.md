@@ -1,6 +1,6 @@
 # Python Foundry
 
-A hub for small, self-contained Python projects built to explore programming fundamentals, algorithms, systems, networking, tooling and practical automation.
+A hub for small, self-contained Python projects covering scripting, automation, data, backend development, AI and practical engineering.
 
 > Every project is independently runnable and intentionally focused.
 
@@ -17,26 +17,28 @@ PythonFoundry/
 │   │   ├── app.py
 │   │   ├── index.html
 │   │   └── style.css
+│   ├── number-guessing-game/
+│   │   └── app.py
 │   └── ...
 └── README.md
 ```
 
-The hub automatically discovers project folders under `projects/`. `Ideas.md` is the backlog and source of truth for the Python project collection. fileciteturn6file0
+The hub automatically discovers project folders under `projects/`. A directory is included in the project catalog only when it contains an `app.py`; `_template` is always excluded.
 
 ## Add a project
 
 1. Copy `projects/_template/` to a new folder.
-2. Implement the project described in `Ideas.md`.
-3. Keep the entry point as `app.py`.
-4. Run `python app.py` from the project directory.
-5. Push the folder to GitHub.
+2. Implement the project from `Ideas.md`.
+3. Run the project from its directory using the documented Python entry point.
+4. Push the folder to GitHub.
+5. The project is automatically discovered by the hub without editing a registry.
 
 ## Project rules
 
 - One project = one folder.
-- Prefer Python standard library modules.
-- Add external dependencies only when the idea genuinely requires them.
-- Keep each project independently runnable.
+- Each project has a clear Python entry point.
+- Keep dependencies minimal and project-specific.
+- Keep projects independently runnable.
 - Keep source code free of comments.
 - Deployment is manual.
 - No GitHub Actions are required.
