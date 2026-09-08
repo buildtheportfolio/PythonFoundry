@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Library Pro | Explorer</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@latest/build/stlite.css"
+    />
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-dim: rgba(99, 102, 241, 0.15);
+        --bg: #0f172a;
+        --surface: #1e293b;
+        --text-muted: #94a3b8;
+        --text-dim: #64748b;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        overflow: hidden;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      #root {
+        height: 100vh;
+        opacity: 0;
+        transition: opacity 0.6s ease-in-out;
+      }
+      #root.loaded {
+        opacity: 1;
+      }
+
+      #loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        z-index: 9999;
+        gap: 0;
+        transition:
+          opacity 0.5s ease-out,
+          visibility 0.5s;
+      }
+      #loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader-logo {
+        font-size: 2.5rem;
+        margin-bottom: 1.25rem;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      .loader-title {
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        margin-bottom: 0.35rem;
+      }
+
+      .loader-sub {
+        color: var(--text-dim);
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+      }
+
+      .progress-track {
+        width: 220px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 99px;
+        overflow: hidden;
+        margin-bottom: 1.25rem;
+      }
+
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--primary), #a78bfa);
+        border-radius: 99px;
+        transition: width 0.4s ease;
+      }
+
+      .loader-step {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.03em;
+        min-height: 1.2em;
+        transition: opacity 0.3s;
+      }
+
+      .loader-pills {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 2rem;
+      }
+
+      .pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 99px;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        font-weight: 500;
+        background: var(--primary-dim);
+        color: #a5b4fc;
+        border: 1px solid rgba(99, 102, 241, 0.25);
+      }
+
+      div[data-testid="stStatusWidget"],
+      .stlite-loader,
+      #stlite-error-modal {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader">
+      <div class="loader-logo">📖</div>
+      <div class="loader-title">Open Library Pro</div>
+      <div class="loader-sub">Curating the world's knowledge · Serverless</div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progress"></div>
+      </div>
+      <div class="loader-step" id="step-label">Opening the archives…</div>
+      <div class="loader-pills">
+        <span class="pill">Open Library</span>
+        <span class="pill">Pyodide</span>
+        <span class="pill">WASM</span>
+      </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@latest/build/stlite.js"></script>
+    <script>
+      const steps = [
+        [0, "Booting Python runtime…"],
+        [18, "Loading Pyodide environment…"],
+        [38, "Installing pandas & altair…"],
+        [60, "Mounting Streamlit…"],
+        [78, "Compiling app.py…"],
+        [90, "Rendering UI…"],
+      ];
+
+      const bar = document.getElementById("progress");
+      const label = document.getElementById("step-label");
+      let stepIndex = 0;
+
+      function advanceStep() {
+        if (stepIndex >= steps.length) return;
+        const [pct, msg] = steps[stepIndex++];
+        bar.style.width = pct + "%";
+        label.textContent = msg;
+      }
+
+      advanceStep();
+      const ticker = setInterval(() => {
+        if (stepIndex < steps.length) advanceStep();
+        else clearInterval(ticker);
+      }, 900);
+
+      stlite.mount(
+        {
+          requirements: ["pandas", "altair", "matplotlib", "requests"],
+          entrypoint: "app.py",
+          files: {
+            "app.py": { url: "app.py" },
+          },
+        },
+        document.getElementById("root"),
+      );
+
+      const observer = new MutationObserver((_, obs) => {
+        const app = document.querySelector(".stApp");
+        if (app) {
+          clearInterval(ticker);
+          bar.style.width = "100%";
+          label.textContent = "Ready!";
+          setTimeout(() => {
+            document.getElementById("loader").classList.add("hidden");
+            document.getElementById("root").classList.add("loaded");
+          }, 400);
+          obs.disconnect();
+        }
+      });
+
+      observer.observe(document.getElementById("root"), {
+        childList: true,
+        subtree: true,
+      });
+    </script>
+  </body>
+</html>

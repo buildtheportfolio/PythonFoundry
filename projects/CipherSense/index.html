@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CipherSense password security analyzer">
+  <meta name="theme-color" content="#070b12">
+  <title>CipherSense</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/stlite.css">
+  <style>
+    html, body, #root { width: 100%; min-height: 100%; margin: 0; padding: 0; }
+    body { background: #070b12; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/stlite.js";
+
+    mount({
+      entrypoint: "app.py",
+      files: {
+        "app.py": { url: "./app.py" },
+        "ciphersense.py": { url: "./ciphersense.py" },
+        "theme.css": { url: "./theme.css" },
+      },
+      streamlitConfig: {
+        "client.toolbarMode": "minimal",
+      },
+    }, document.getElementById("root"));
+  </script>
+</body>
+</html>

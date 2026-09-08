@@ -1,0 +1,34 @@
+:root{color-scheme:dark}
+.stApp{background:radial-gradient(circle at 8% 0%,rgba(82,211,255,.08),transparent 27%),radial-gradient(circle at 92% 8%,rgba(145,126,255,.08),transparent 25%),#070b12}
+.block-container{width:min(1180px,100%);max-width:none;padding:clamp(1.25rem,4vw,2.8rem) clamp(.85rem,3vw,1.5rem) 4rem}
+[data-testid="stHeader"]{background:transparent}
+[data-testid="stToolbar"]{display:none}
+.cs-hero{padding:clamp(1.35rem,4vw,2.3rem);border:1px solid #294562;border-radius:clamp(16px,2vw,22px);background:linear-gradient(135deg,rgba(12,25,43,.98),rgba(18,20,43,.98));box-shadow:0 24px 70px rgba(0,0,0,.3);position:relative;overflow:hidden}
+.cs-hero:after{content:"";position:absolute;left:8%;right:8%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#63d7ff,#9a86ff,transparent);opacity:.8}
+.cs-eyebrow,.cs-section-label{color:#63d7ff;font:700 .7rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.16em;text-transform:uppercase}
+.cs-eyebrow{margin-bottom:.65rem}
+.cs-hero h1{margin:0;color:#f4f7fb;font-size:clamp(2.25rem,7vw,4.4rem);line-height:.98;letter-spacing:-.055em}
+.cs-hero p{max-width:760px;margin:.8rem 0 0;color:#aebdce;line-height:1.7}
+.cs-notice{margin:1rem 0 1.7rem;padding:.8rem 1rem;border:1px solid rgba(101,230,161,.24);border-radius:12px;background:rgba(12,43,30,.68);color:#bdf2d2;font-size:.88rem}
+.cs-section-label{margin:1.6rem 0 .45rem;color:#8292a7}
+.cs-section-title{margin:0 0 1rem;color:#eef2f7;font-size:1.12rem;letter-spacing:-.02em}
+[data-testid="stMetric"]{min-width:0;border:1px solid #24364d;border-radius:14px;background:linear-gradient(180deg,rgba(17,29,47,.9),rgba(10,18,30,.94));padding:.85rem}
+[data-testid="stMetricLabel"]{color:#8190a2}
+[data-testid="stMetricValue"]{color:#f0f4f8;overflow-wrap:anywhere}
+.stTextInput input,.stNumberInput input{min-height:2.8rem;border:1px solid #293c55;border-radius:11px;background:#060b12;color:#f0f4f8}
+.stTextInput input:focus,.stNumberInput input:focus{border-color:#63d7ff;box-shadow:0 0 0 3px rgba(99,215,255,.12)}
+.stButton>button{min-height:2.8rem;border:1px solid #30445d;border-radius:11px;background:linear-gradient(180deg,#172438,#101a2a);color:#edf2f7;font-weight:700;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+.stButton>button:hover{transform:translateY(-1px);border-color:#63d7ff;box-shadow:0 10px 26px rgba(0,0,0,.24)}
+.stProgress>div>div{background:linear-gradient(90deg,#ff7f8b,#ffd166 48%,#65e6a1)}
+.stAlert{border-radius:12px}
+.cs-flag{display:inline-block;margin:.2rem .35rem .2rem 0;padding:.35rem .6rem;border:1px solid rgba(255,127,139,.3);border-radius:999px;background:rgba(67,25,34,.72);color:#ffc3ca;font-size:.76rem;max-width:100%;overflow-wrap:anywhere}
+.cs-flag-good{border-color:rgba(101,230,161,.28);background:rgba(15,57,39,.72);color:#c4f3d6}
+.cs-card{height:100%;box-sizing:border-box;padding:1rem 1.05rem;border:1px solid #24364d;border-radius:14px;background:linear-gradient(180deg,rgba(16,28,46,.9),rgba(9,17,29,.94))}
+.cs-card h3{margin:0 0 .7rem;color:#edf2f7;font-size:.9rem}
+.cs-card p{margin:0;color:#a4b2c2;line-height:1.6;font-size:.88rem;overflow-wrap:anywhere}
+.cs-check{padding:.18rem 0;color:#a8b5c5;font-size:.88rem}
+.cs-footnote{color:#6f7e91;font-size:.8rem;line-height:1.65}
+.stCode{border:1px solid #29415e;border-radius:12px;max-width:100%;overflow:auto}
+@media(max-width:760px){.block-container{padding-top:1rem}.cs-notice{font-size:.82rem}.cs-section-label{margin-top:1.25rem}[data-testid="stMetric"]{padding:.7rem}.stButton>button{min-height:2.65rem}}
+@media(max-width:520px){.cs-hero{padding:1.2rem;border-radius:15px}.cs-hero h1{font-size:2.2rem}.cs-hero p{font-size:.9rem}.cs-flag{font-size:.7rem}.cs-card{padding:.9rem}.stTextInput input,.stNumberInput input{font-size:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}

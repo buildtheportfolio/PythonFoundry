@@ -1,0 +1,353 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caesar Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#070b10;--card:#0f1620;--line:#233246;--txt:#d6e2f0;
+--muted:#7f8ea3;--green:#39d353;--blue:#58a6ff;--amber:#e3b341;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:'JetBrains Mono',monospace;
+background:radial-gradient(circle at top,#0e1520,#070b10 60%);
+color:var(--txt);
+min-height:100vh;
+overflow-x:hidden;
+}
+body:before{
+content:"";
+position:fixed;inset:0;
+background:repeating-linear-gradient(
+0deg,
+transparent,
+transparent 2px,
+rgba(255,255,255,.02) 2px,
+rgba(255,255,255,.02) 4px
+);
+pointer-events:none;
+}
+.wrap{max-width:980px;margin:auto;padding:32px 18px 70px}
+.top{
+display:flex;justify-content:space-between;align-items:center;
+gap:10px;flex-wrap:wrap;margin-bottom:24px
+}
+h1{font-size:32px}
+.sub{color:var(--muted);font-size:13px;margin-top:6px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{
+font-size:10px;padding:5px 10px;border:1px solid var(--line);
+border-radius:999px;color:var(--green)
+}
+.grid{
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:18px
+}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:14px;
+padding:18px;
+box-shadow:0 10px 40px rgba(0,0,0,.25);
+}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+button{
+background:#111a25;
+color:var(--txt);
+border:1px solid var(--line);
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+font-family:inherit;
+transition:.2s;
+}
+button:hover{transform:translateY(-1px);border-color:var(--blue)}
+button.active{background:var(--green);color:#07110a;border-color:var(--green)}
+label{
+display:block;
+font-size:12px;
+color:var(--muted);
+margin:12px 0 8px
+}
+textarea,input[type=text]{
+width:100%;
+background:#09111a;
+border:1px solid var(--line);
+border-radius:10px;
+padding:12px;
+color:var(--txt);
+font-family:inherit;
+outline:none;
+}
+textarea{min-height:140px;resize:vertical}
+.range-row{display:flex;align-items:center;gap:12px;margin-top:10px}
+input[type=range]{flex:1;accent-color:var(--green)}
+.big{
+font-size:26px;
+font-weight:700;
+color:var(--green);
+min-width:40px;text-align:right
+}
+.output{
+background:#09111a;
+border:1px solid var(--line);
+border-radius:10px;
+padding:14px;
+min-height:140px;
+white-space:pre-wrap;
+word-break:break-word;
+color:var(--green);
+position:relative;
+}
+.copy{
+position:absolute;top:10px;right:10px;
+font-size:11px;padding:6px 10px
+}
+.section-title{
+font-size:14px;
+color:var(--blue);
+margin-bottom:10px
+}
+.small{font-size:12px;color:var(--muted)}
+.table{
+font-size:13px;
+display:grid;
+gap:8px
+}
+.row{
+display:grid;
+grid-template-columns:70px 90px 1fr;
+gap:10px;
+padding:8px;
+border:1px solid #182434;
+border-radius:8px
+}
+.wheel{
+display:grid;
+grid-template-columns:repeat(13,1fr);
+gap:6px
+}
+.cell{
+text-align:center;
+padding:8px 4px;
+border:1px solid #1d2b3e;
+border-radius:8px;
+font-size:12px
+}
+.cell .a{color:var(--muted);display:block}
+.cell .b{color:var(--green);font-weight:700}
+.bar{
+height:8px;border-radius:999px;background:#182434;overflow:hidden
+}
+.fill{height:100%;background:var(--green)}
+.footer{
+margin-top:24px;
+color:var(--muted);
+font-size:12px;
+text-align:center
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+<div>
+<h1>Caesar Lab</h1>
+<div class="sub">Encrypt · Decrypt · Crack · Brute Force · Frequency Analyzer</div>
+</div>
+<div class="badges">
+<div class="badge">PYTHON TOOL</div>
+<div class="badge">WEB UI</div>
+<div class="badge">CRYPTO</div>
+</div>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<div class="tabs">
+<button class="tab active" onclick="setMode('encrypt',this)">Encrypt</button>
+<button class="tab" onclick="setMode('decrypt',this)">Decrypt</button>
+<button class="tab" onclick="setMode('crack',this)">Crack</button>
+<button class="tab" onclick="setMode('brute',this)">Brute</button>
+</div>
+
+<label>Input</label>
+<textarea id="input" placeholder="Type text here..." oninput="run()"></textarea>
+
+<label>Shift (ROT-N)</label>
+<div class="range-row">
+<input id="shift" type="range" min="1" max="25" value="13" oninput="updateShift()">
+<div class="big" id="shiftVal">13</div>
+</div>
+
+<label>Output</label>
+<div class="output" id="output">
+<button class="copy" onclick="copyOut()">Copy</button>
+Result appears here...
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">Alphabet Wheel</div>
+<div class="wheel" id="wheel"></div>
+
+<div style="height:18px"></div>
+
+<div class="section-title">Frequency Chart</div>
+<div id="freq"></div>
+
+<div style="height:18px"></div>
+
+<div class="section-title">Crack Results</div>
+<div class="table" id="crackTable">
+<div class="small">Available in Crack mode</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+let mode="encrypt";
+
+function setMode(m,btn){
+mode=m;
+document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+run();
+}
+
+function updateShift(){
+shiftVal.textContent=shift.value;
+run();
+}
+
+function shiftChar(ch,s){
+if(ch>='A'&&ch<='Z') return String.fromCharCode((ch.charCodeAt(0)-65+s+26)%26+65);
+if(ch>='a'&&ch<='z') return String.fromCharCode((ch.charCodeAt(0)-97+s+26)%26+97);
+return ch;
+}
+
+function caesar(text,s,decrypt=false){
+const k=decrypt?-s:s;
+return [...text].map(c=>shiftChar(c,k)).join('');
+}
+
+function run(){
+const text=input.value;
+const s=parseInt(shift.value);
+
+if(mode==="encrypt"){
+output.innerHTML=`<button class="copy" onclick="copyOut()">Copy</button>${escapeHtml(caesar(text,s,false))}`;
+}
+else if(mode==="decrypt"){
+output.innerHTML=`<button class="copy" onclick="copyOut()">Copy</button>${escapeHtml(caesar(text,s,true))}`;
+}
+else if(mode==="crack"){
+renderCrack(text);
+}
+else{
+renderBrute(text);
+}
+
+renderWheel(s, mode==="decrypt");
+renderFreq(text);
+}
+
+function renderWheel(s,dec){
+wheel.innerHTML="";
+const abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+for(let ch of abc){
+const map=shiftChar(ch,dec?-s:s);
+wheel.innerHTML += `
+<div class="cell">
+<span class="a">${ch}</span>
+<span class="b">${map}</span>
+</div>`;
+}
+}
+
+function renderFreq(text){
+const counts={};
+let total=0;
+for(let c of text.toLowerCase()){
+if(c>='a'&&c<='z'){
+counts[c]=(counts[c]||0)+1;
+total++;
+}
+}
+freq.innerHTML="";
+"etaoinshrdlcumwfgypbvkjxqz".split("").forEach(ch=>{
+const pct=total?((counts[ch]||0)/total*100):0;
+freq.innerHTML += `
+<div style="margin-bottom:8px">
+<div class="small">${ch.toUpperCase()} ${pct.toFixed(1)}%</div>
+<div class="bar"><div class="fill" style="width:${pct}%"></div></div>
+</div>`;
+});
+}
+
+function scoreEnglish(str){
+const common=["the","and","ing","ion","you","that","have","hello"];
+let score=0;
+const low=str.toLowerCase();
+common.forEach(w=>{ if(low.includes(w)) score+=3; });
+score += str.split(" ").length;
+return score;
+}
+
+function renderCrack(text){
+let rows=[];
+for(let i=1;i<=25;i++){
+rows.push({
+shift:i,
+text:caesar(text,i,false),
+score:scoreEnglish(caesar(text,i,false))
+});
+}
+rows.sort((a,b)=>b.score-a.score);
+
+output.innerHTML=`<button class="copy" onclick="copyOut()">Copy</button>${escapeHtml(rows[0]?.text||"")}`;
+
+crackTable.innerHTML="";
+rows.slice(0,5).forEach((r,n)=>{
+crackTable.innerHTML += `
+<div class="row">
+<div>#${n+1}</div>
+<div>ROT-${r.shift}</div>
+<div>${escapeHtml(r.text)}</div>
+</div>`;
+});
+}
+
+function renderBrute(text){
+let all="";
+for(let i=1;i<=25;i++){
+all += `ROT-${String(i).padStart(2,"0")} : ${caesar(text,i,false)}\n`;
+}
+output.innerHTML=`<button class="copy" onclick="copyOut()">Copy</button>${escapeHtml(all)}`;
+crackTable.innerHTML='<div class="small">Showing all shifts in output</div>';
+}
+
+function copyOut(){
+const txt=output.innerText.replace("Copy","").trim();
+navigator.clipboard.writeText(txt);
+}
+
+function escapeHtml(s){
+return s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+
+run();
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Serverless Starter</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@latest/build/stlite.css" />
+    <style>
+      :root {
+        --primary: #6366f1;
+        --bg: #0f172a;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg);
+        overflow: hidden;
+      }
+      #root {
+        height: 100vh;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+      }
+      #root.loaded {
+        opacity: 1;
+      }
+      #loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        z-index: 9999;
+        transition: opacity 0.5s ease-out, visibility 0.5s;
+      }
+      #loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255,255,255,0.1);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .loader-text {
+        color: #94a3b8;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.05em;
+      }
+
+      /* This is the magic CSS to hide the stlite technical log messages */
+      div[data-testid="stStatusWidget"], 
+      .stlite-loader,
+      #stlite-error-modal {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader">
+      <div class="spinner"></div>
+      <div class="loader-text">Initializing Python Environment...</div>
+    </div>
+
+    <div id="root"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@latest/build/stlite.js"></script>
+    <script>
+      stlite.mount(
+        {
+          requirements: ["pandas", "altair"],
+          entrypoint: "app.py",
+          files: {
+            "app.py": { url: "app.py" }
+          },
+        },
+        document.getElementById("root"),
+      );
+
+      const observer = new MutationObserver((mutations, obs) => {
+        const app = document.querySelector(".stApp");
+        if (app) {
+          setTimeout(() => {
+            document.getElementById("loader").classList.add("hidden");
+            document.getElementById("root").classList.add("loaded");
+          }, 500);
+          obs.disconnect();
+        }
+      });
+
+      observer.observe(document.getElementById("root"), {
+        childList: true,
+        subtree: true
+      });
+    </script>
+  </body>
+</html>
